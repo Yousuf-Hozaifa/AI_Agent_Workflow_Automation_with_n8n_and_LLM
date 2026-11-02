@@ -160,5 +160,5 @@ The tests mock the LLM, so they run without an API key. They cover classificatio
 
 ## 👤 Author
 
-**Md. Yousuf Hozaifa**: AI/ML engineer and research assistant at AMIR Lab
+**Md. Yousuf Hozaifa**
 [GitHub](https://github.com/Yousuf-Hozaifa)
