@@ -1,0 +1,21 @@
+services:
+  api:
+    build: .
+    container_name: lead_api
+    restart: unless-stopped
+    ports: ["8000:7860"]
+    env_file: .env
+    environment:
+      N8N_WEBHOOK_URL: http://n8n:5678/webhook/lead-inbound
+    depends_on: [n8n]
+  n8n:
+    image: n8nio/n8n:latest   # pin to the version you tested before production
+    container_name: lead_n8n
+    restart: unless-stopped
+    ports: ["5678:5678"]
+    environment:
+      GENERIC_TIMEZONE: Asia/Dhaka
+      WEBHOOK_URL: http://localhost:5678/
+    volumes: ["n8n_data:/home/node/.n8n"]
+volumes:
+  n8n_data:

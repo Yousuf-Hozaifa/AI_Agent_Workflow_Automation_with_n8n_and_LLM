@@ -1,0 +1,23 @@
+{
+  "name": "Lead Router",
+  "nodes": [
+    {"parameters": {"httpMethod": "POST", "path": "lead-inbound", "options": {}},
+     "name": "Lead Webhook", "type": "n8n-nodes-base.webhook", "typeVersion": 2, "position": [0, 0]},
+    {"parameters": {"rules": {"values": [
+      {"conditions": {"conditions": [{"leftValue": "={{ $json.body.intent }}", "rightValue": "Sales", "operator": {"type": "string", "operation": "equals"}}]}, "renameOutput": true, "outputKey": "Sales"},
+      {"conditions": {"conditions": [{"leftValue": "={{ $json.body.intent }}", "rightValue": "Support", "operator": {"type": "string", "operation": "equals"}}]}, "renameOutput": true, "outputKey": "Support"}
+    ]}, "options": {"fallbackOutput": "extra"}},
+     "name": "Route by intent", "type": "n8n-nodes-base.switch", "typeVersion": 3, "position": [240, 0]},
+    {"parameters": {}, "name": "Notify Sales (replace with Slack/Sheets)", "type": "n8n-nodes-base.noOp", "typeVersion": 1, "position": [480, -120]},
+    {"parameters": {}, "name": "Create Support ticket (replace)", "type": "n8n-nodes-base.noOp", "typeVersion": 1, "position": [480, 0]},
+    {"parameters": {}, "name": "Spam / needs review", "type": "n8n-nodes-base.noOp", "typeVersion": 1, "position": [480, 120]}
+  ],
+  "connections": {
+    "Lead Webhook": {"main": [[{"node": "Route by intent", "type": "main", "index": 0}]]},
+    "Route by intent": {"main": [
+      [{"node": "Notify Sales (replace with Slack/Sheets)", "type": "main", "index": 0}],
+      [{"node": "Create Support ticket (replace)", "type": "main", "index": 0}],
+      [{"node": "Spam / needs review", "type": "main", "index": 0}]]}
+  },
+  "settings": {"executionOrder": "v1"}
+}
